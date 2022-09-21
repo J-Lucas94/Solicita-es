@@ -1,0 +1,17 @@
+.btn-danger {
+    background-color: rgb(245, 65, 65);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 10px;
+    margin: auto;
+}
+.btn-danger:hover{
+    background-color: rgb(245, 30, 30);
+}
+
+
+.vermelho{
+    color: red;
+}

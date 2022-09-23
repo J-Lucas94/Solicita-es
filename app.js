@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
+const cors = require('cors')
 
 //passport
 const passport = require('passport')
@@ -25,7 +26,10 @@ app.use(flash())
 
 //midleware
 
+
+
 app.use((req, res, next) => {
+    cors()
     res.locals.success_msg = req.flash("success_msg")
     res.locals.error_msg = req.flash("error_msg")
     res.locals.error = req.flash("error")

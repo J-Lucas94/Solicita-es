@@ -41,16 +41,16 @@ const Solicitacao = db.define('Solicitacao', {
 
     data_entrega: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
 
     obs_entrega: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
 
 })
 
-// db.sync({force:true})
+// db.sync({alter:true})
 
 module.exports = Solicitacao

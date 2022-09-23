@@ -1,82 +1,197 @@
+<style>
+    
+
+        .itens {
+            display: none;
+        }
+
+    @media only screen and (max-width: 600px) {
+        body {
+        }
+
+        .table1 {
+            display: none;
+        }
+
+        .itens {
+            display: flex;
+        }
+    }
+
+     #form_edit {
+        display: none;
+        position: fixed;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        top: 0;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 10px;
+        
+    }
+
+    .form_edit {
+        height: 80vh;
+        position: relative;
+    }
+   
+
+    a {
+        text-decoration: none;
+    }
+
+    .item {
+        display: grid;
+        grid-template-rows: auto;
+    }
+</style>
 <div class="col-8 m-auto">
     <div class="col-12 mt-4" id="header">
-        <h1>Solicitações</h1>
+        <h1>Solicitação</h1>
     </div>
 
     <div class="col-12 mt-3 " id="header2">
 
-        <form>
-            <div class="form-group">
-                <label>Número</label>
-                <input class="form-control" type="text" name="vendedor" id="vendedor" placeholder="Número..."
-                    value="{{pedido.vendedor}}" required>
-                <small id="erro-vendedor" class="vermelho"></small>
+        <div class="form-group">
+            <label>Número</label>
+            <input class="form-control" type="text" name="numero" id="numero" placeholder="Número..."
+                value="{{solicitacao.numero}}" required>
+            <small id="erro-numero" class="vermelho"></small>
+        </div>
+
+        <div class="form-group mt-2">
+            <label>Usuário</label>
+            <input class="form-control" type="text" name="usuario_solicitante" id="usuario_solicitante"
+                placeholder="Usuário solicitante..." value="{{solicitacao.usuario_solicitante}}" required >
+            <small id="erro-usuario_solicitante" class="vermelho"></small>
+        </div>
+
+        <div class="col-12 mt-4" id="header">
+            <h1>Itens</h1>
+        </div>
+
+        <div class="row">
+            <button class="btn btn-primary" onclick="javascript:newItem()">Novo Item</button>
+
+            <div class="table1 col-12 mt-4">
+                <div class="table-responsive">
+                    <table id="tabela" class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Usuário</th>
+                                <th>Item</th>
+                                <th>Descrição</th>
+                                <th>Quantidade</th>
+                                <th>Observação</th>
+                                <th>Data de Nescessidade</th>
+                                <th>Data de entrega</th>
+                                <th>Observação de entrega</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="novalinha">
+                            
+                            <tr>
+                                <td>{{solicitacao.numero}}</td>
+                                <td>{{solicitacao.usuario_solicitante}}</td>
+                                <td><a href="#" onclick="javascript:editItem(event)" data-id_item="1">{{solicitacao.item}}</a></td>
+                                <td>{{solicitacao.descricao}}</td>
+                                <td>{{solicitacao.quantidade}}</td>
+                                <td>{{solicitacao.observacao}}</td>
+                                <td>{{solicitacao.data_necessidade}}</td>
+                                <td>{{solicitacao.data_entrega}}</td>
+                                <td>{{solicitacao.obs_entrega}}</td>
+                            </tr>
+                            
+                        </tbody>
+                        
+                    </table>
+
+                </div>
             </div>
+            <ul class="itens">
+                <li class="item">
+                    <span>Item: 1</span>
+                    <span>Descricao: Cimento 50kg</span>
+                    <span>Quantidade: 10</span>
+                    <span>Observação: Entregar no galpão H</span>
+                    <span>Data de necessidade</span>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+</div>
+<div class="form_edit col-8">
+
+    <form id="form_edit">
+        <button class="btn btn-danger" onclick="javascript:closeItem()">Fechar</button>
+        <div>
 
             <div class="form-group mt-2">
-                <label>Usuário</label>
-                <input class="form-control" type="text" name="cod_cliente" id="cod_cliente"
-                    placeholder="Usuário solicitante..." value="{{pedido.cod_cliente}}" required>
-                <small id="erro-cod_cliente" class="vermelho"></small>
+                
+                <input class="form-control" type="text" name="idSolicitacao" id="idSolicitacao" placeholder="Item..."
+                    value="{{solicitacao.id}}" hidden>
+                <small id="erro-item" class="vermelho"></small>
             </div>
-
-            <div class="col-12 mt-4" id="header">
-                <h1>Itens</h1>
-            </div>
-
             <div class="form-group mt-2">
                 <label>Item</label>
-                <input class="form-control" type="text" name="loja_numero" id="loja_numero"
-                    placeholder="Item..." value="{{pedido.loja_numero}}" required>
-                <small id="erro-loja_numero" class="vermelho"></small>
+                <input class="form-control" type="text" name="item" id="item" placeholder="Item..."
+                    value="{{solicitacao.item}}" required>
+                <small id="erro-item" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Descrição</label>
-                <input class="form-control" type="text" name="loja_numero" id="loja_numero"
-                    placeholder="Descrição..." value="{{pedido.loja_numero}}" required>
-                <small id="erro-loja_numero" class="vermelho"></small>
+                <input class="form-control" type="text" name="descricao" id="descricao" placeholder="Descrição..."
+                    value="{{solicitacao.descricao}}" required>
+                <small id="erro-descricao" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Quantidade</label>
-                <input class="form-control" type="text" name="loja_numero" id="loja_numero"
-                    placeholder="Quantidade..." value="{{pedido.loja_numero}}" required>
-                <small id="erro-loja_numero" class="vermelho"></small>
+                <input class="form-control" type="text" name="quantidade" id="quantidade" placeholder="Quantidade..."
+                    value="{{solicitacao.quantidade}}" required>
+                <small id="erro-quantidade" class="vermelho"></small>
             </div>
 
-             <div class="form-group mt-2">
+            <div class="form-group mt-2">
                 <label>Observação</label>
-                <input class="form-control" type="text" name="loja_numero" id="loja_numero"
-                    placeholder="Observação..." value="{{pedido.loja_numero}}" required>
-                <small id="erro-loja_numero" class="vermelho"></small>
+                <input class="form-control" type="text" name="observacao" id="observacao" placeholder="Observação..."
+                    value="{{solicitacao.observacao}}" required>
+                <small id="erro-observacao" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Data de Nescessidade</label>
-                <input class="form-control" type="date" name="data" id="data" placeholder="Digite a Data..."
-                    value="{{pedido.data}}" required>
-                <small id="erro-data" class="vermelho"></small>
+                <input class="form-control" type="date" name="data_necessidade" id="data_necessidade"
+                    placeholder="Digite a Data..." value="{{solicitacao.data_necessidade}}" required>
+                <small id="erro-data_necessidade" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Data de entrega</label>
-                <input class="form-control" type="date" name="data" id="data" placeholder="Digite a Data..."
-                    value="{{pedido.data}}" required>
-                <small id="erro-data" class="vermelho"></small>
+                <input class="form-control" type="date" name="data_entrega" id="data_entrega"
+                    placeholder="Digite a Data..." value="{{solicitacao.data_entrega}}" required>
+                <small id="erro-data_entrega" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Observação</label>
-                <input class="form-control" type="text" name="data" id="data" placeholder="Observação de entrega..."
-                    value="{{pedido.data}}" required>
-                <small id="erro-data" class="vermelho"></small>
+                <input class="form-control" type="text" name="obs_entrega" id="obs_entrega"
+                    placeholder="Observação de entrega..." value="{{solicitacao.obs_entrega}}" required>
+                <small id="erro-obs_entrega" class="vermelho"></small>
             </div>
 
             <button id="form1" type="button" class="btn btn-success mt-3">Registrar</button>
-        </form>
+    </form>
+</div>
 
-    </div>
 </div>
 
 <script>
@@ -86,178 +201,84 @@
     try {
         let form1 = document.querySelector('#form1')
         form1.addEventListener('click', async () => {
-            let idPedido = document.querySelector('#idPedido').value
-            let vendedor = document.querySelector('#vendedor').value
-            let cod_cliente = document.querySelector('#cod_cliente').value
-            let loja_numero = document.querySelector('#loja_numero').value
-            let data = document.querySelector('#data').value
-            let razao_social = document.querySelector('#razao_social').value
-            let cep = document.querySelector('#cep').value
-            let endereco = document.querySelector('#endereco').value
-            let bairro = document.querySelector('#bairro').value
-            let municipio = document.querySelector('#municipio').value
-            let uf = document.querySelector('#uf').value
-            let email = document.querySelector('#email').value
-            let fone = document.querySelector('#fone').value
-            let contato = document.querySelector('#contato').value
-            let cpf = document.querySelector('#cpf').value
-            let inscricao = document.querySelector('#inscricao').value
-            let cond_pagamento = document.querySelector('#cond_pagamento').value
-            let transportadora = document.querySelector('#transportadora').value
 
-            if (vendedor == "") {
-                document.getElementById('erro-vendedor').innerHTML = "Preencha o campo vendedor !";
-                document.getElementById('vendedor').focus();
+            let numero = document.querySelector('#numero').value
+            let usuario_solicitante = document.querySelector('#usuario_solicitante').value
+            let item = document.querySelector('#item').value
+            let descricao = document.querySelector('#descricao').value
+            let quantidade = document.querySelector('#quantidade').value
+            let observacao = document.querySelector('#observacao').value
+            let data_necessidade = document.querySelector('#data_necessidade').value
+            let data_entrega = document.querySelector('#data_entrega').value
+            let obs_entrega = document.querySelector('#obs_entrega').value
+            let idSolicitacao = document.querySelector('#idSolicitacao').value
+
+            if (numero == "") {
+                document.getElementById('erro-numero').innerHTML = "Preencha o campo Número !";
+                document.getElementById('numero').focus();
                 return false;
-
             } else {
-                document.getElementById('erro-vendedor').innerHTML = "";
+                document.getElementById('erro-numero').innerHTML = "";
             }
 
-            if (cod_cliente == "") {
-                document.getElementById('erro-cod_cliente').innerHTML = "Preencha o campo código do cliente !";
-                document.getElementById('cod_cliente').focus();
+            if (usuario_solicitante == "") {
+                document.getElementById('erro-usuario_solicitante').innerHTML = "Preencha o campo Usuário !";
+                document.getElementById('usuario_solicitante').focus();
                 return false;
             } else {
-                document.getElementById('erro-cod_cliente').innerHTML = "";
+                document.getElementById('erro-usuario_solicitante').innerHTML = "";
             }
 
-            if (loja_numero == "") {
-                document.getElementById('erro-loja_numero').innerHTML = "Preencha o campo número da loja !";
-                document.getElementById('loja_numero').focus();
+            if (item == "") {
+                document.getElementById('erro-item').innerHTML = "Preencha o campo Item !";
+                document.getElementById('item').focus();
                 return false;
             } else {
-                document.getElementById('erro-loja_numero').innerHTML = "";
+                document.getElementById('erro-item').innerHTML = "";
             }
 
-            if (data == "") {
-                document.getElementById('erro-data').innerHTML = "Preencha o campo data !";
-                document.getElementById('data').focus();
+            if (descricao == "") {
+                document.getElementById('erro-descricao').innerHTML = "Preencha o campo descrição !";
+                document.getElementById('descricao').focus();
                 return false;
             } else {
-                document.getElementById('erro-data').innerHTML = "";
+                document.getElementById('erro-descricao').innerHTML = "";
             }
 
-            if (razao_social == "") {
-                document.getElementById('erro-razao_social').innerHTML = "Preencha o campo Razão social!";
-                document.getElementById('razao_social').focus();
+            if (quantidade == "") {
+                document.getElementById('erro-quantidade').innerHTML = "Preencha o campo Quantidade!";
+                document.getElementById('quantidade').focus();
                 return false;
             } else {
-                document.getElementById('erro-razao_social').innerHTML = "";
+                document.getElementById('erro-quantidade').innerHTML = "";
             }
 
-            if (cep == "") {
-                document.getElementById('erro-cep').innerHTML = "Preencha o campo CEP !";
-                document.getElementById('cep').focus();
+            if (observacao == "") {
+                document.getElementById('erro-observacao').innerHTML = "Preencha o campo Observação!";
+                document.getElementById('observacao').focus();
                 return false;
             } else {
-                document.getElementById('erro-cep').innerHTML = "";
+                document.getElementById('erro-observacao').innerHTML = "";
             }
 
-            if (endereco == "") {
-                document.getElementById('erro-endereco').innerHTML = "Preencha o campo Endereço !";
-                document.getElementById('endereco').focus();
+            if (data_necessidade == "") {
+                document.getElementById('erro-data_necessidade').innerHTML = "Preencha o campo Data de necessidade !";
+                document.getElementById('data_necessidade').focus();
                 return false;
             } else {
-                document.getElementById('erro-endereco').innerHTML = "";
-            }
-
-            if (bairro == "") {
-                document.getElementById('erro-bairro').innerHTML = "Preencha o campo bairro !";
-                document.getElementById('bairro').focus();
-                return false;
-            } else {
-                document.getElementById('erro-bairro').innerHTML = "";
-            }
-
-            if (municipio == "") {
-                document.getElementById('erro-municipio').innerHTML = "Preencha o campo municipio !";
-                document.getElementById('municipio').focus();
-                return false;
-            } else {
-                document.getElementById('erro-municipio').innerHTML = "";
-            }
-
-            if (uf == "") {
-                document.getElementById('erro-uf').innerHTML = "Preencha o campo UF !";
-                document.getElementById('uf').focus();
-                return false;
-            } else {
-                document.getElementById('erro-uf').innerHTML = "";
-            }
-
-            if (email == "") {
-                document.getElementById('erro-email').innerHTML = "Preencha o campo E-mail !";
-                document.getElementById('email').focus();
-                return false;
-            } else {
-                document.getElementById('erro-email').innerHTML = "";
-            }
-
-            if (fone == "") {
-                document.getElementById('erro-fone').innerHTML = "Preencha o campo Telefone !";
-                document.getElementById('fone').focus();
-                return false;
-            } else {
-                document.getElementById('erro-fone').innerHTML = "";
-            }
-
-            if (contato == "") {
-                document.getElementById('erro-contato').innerHTML = "Preencha o campo contato !";
-                document.getElementById('contato').focus();
-                return false;
-            } else {
-                document.getElementById('erro-contato').innerHTML = "";
-            }
-
-            if (cpf == "") {
-                document.getElementById('erro-cpf').innerHTML = "Preencha o campo CPF !";
-                document.getElementById('cpf').focus();
-                return false;
-            } else {
-                document.getElementById('erro-cpf').innerHTML = "";
-            }
-
-            if (inscricao == "") {
-                document.getElementById('erro-inscricao').innerHTML = "Preencha o campo inscrição estadual !";
-                document.getElementById('inscricao').focus();
-                return false;
-            } else {
-                document.getElementById('erro-inscricao').innerHTML = "";
-            }
-
-            if (cond_pagamento == "") {
-                document.getElementById('erro-cond_pagamento').innerHTML = "Preencha o campo condição de pagamento !";
-                document.getElementById('cond_pagamento').focus();
-                return false;
-            } else {
-                document.getElementById('erro-cond_pagamento').innerHTML = "";
-            }
-
-            if (transportadora == "") {
-                document.getElementById('erro-transportadora').innerHTML = "Preencha o campo transportadora !";
-                document.getElementById('transportadora').focus();
-                return false;
-            } else {
-                document.getElementById('erro-transportadora').innerHTML = "";
+                document.getElementById('erro-data_necessidade').innerHTML = "";
             }
 
 
-
-
-
-
-
-            const response = await fetch('/pedido/registrar', {
+            const response = await fetch('/solicitacao', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    idPedido, vendedor, cod_cliente, loja_numero, data, razao_social,
-                    cep, endereco, bairro, municipio, uf, email, fone, contato, cpf, inscricao, cond_pagamento, transportadora,
-                    itens
+                    idSolicitacao,numero, usuario_solicitante, item, descricao, quantidade, observacao,
+                    data_necessidade,data_entrega, obs_entrega
                 })
             })
 
@@ -265,21 +286,14 @@
                 .then((data) => {
                     console.log("esse é a data", data)
 
-                    if (data.message == "Produto não encontrado") {
-                        swal("Error !", "Esse produto não foi encontrado: " + data.itemP, "error");
+
+                   
+
+                    if (data.message == "Sucesso") {
+                        swal("Sucesso !", "Solicitação realizada com sucesso", "success")
                     }
 
-                    if (data.message == "Id não encontrado") {
-                        swal("Error !", "Id não encontrado!", "error");
-                    }
-
-                    if (data.message == "Registro realizado com sucesso") {
-                        swal("Sucesso !", "Registro realizado com sucesso", "success")
-                    }
-
-                    if (data.id_pedido) {
-                        document.getElementById('idPedido').value = data.id_pedido
-                    }
+                    
                 })
         })
 
@@ -288,4 +302,15 @@
         console.log(`Erro: ${err}`)
     }
 
+    function newItem() {
+        document.getElementById('form_edit').style.display = 'block'
+        document.getElementById('item')
+    }
+    function closeItem() {
+        document.getElementById('form_edit').style.display = 'none'
+    }
+    function editItem(e) {
+        document.getElementById('form_edit').style.display = 'block'
+        document.getElementById('item').value = e.target.getAttribute('data-id_item')
+    }
 </script>

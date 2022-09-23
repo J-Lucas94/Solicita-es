@@ -19,7 +19,7 @@ const Solicitacao = db.define('Solicitacao', {
         allowNull: false,
     },
 
-    descrição: {
+    descricao: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -29,7 +29,7 @@ const Solicitacao = db.define('Solicitacao', {
         allowNull: false,
     },
 
-    observação: {
+    observacao: {
         type: DataTypes.STRING,
         allowNull: false,
     },

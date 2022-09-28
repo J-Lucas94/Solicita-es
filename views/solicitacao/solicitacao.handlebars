@@ -76,7 +76,8 @@
         <div class="form-group mt-2">
             <label>Usuário</label>
             <input class="form-control" type="text" name="usuario_solicitante" id="usuario_solicitante"
-                placeholder="Usuário solicitante..." value="{{solicitante.usuario_solicitante}}" required>
+                placeholder="Usuário solicitante..." value="{{solicitante.usuario_solicitante}}" {{#if
+                permissoes.perfilEntregador}} readonly {{/if}}>
             <small id="erro-usuario_solicitante" class="vermelho"></small>
         </div>
 
@@ -115,8 +116,10 @@
                                 <td>{{this.data_entrega}}</td>
                                 <td>{{this.obs_entrega}}</td>
 
+
                                 <td class="text-center">
                                     <span class="d-none d-md-block">
+
 
                                         <a href="/remove/{{this.numero}}/{{this.item}}"
                                             class="btn btn-outline-danger btn-sm">Remover</a>
@@ -129,7 +132,10 @@
                                         </div>
                                     </div>
                                 </td>
+
                             </tr>
+
+
 
                             {{/each}}
 
@@ -139,12 +145,12 @@
 
                     <span class="d-none d-md-block">
 
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#myModal">
+                        <button {{#if permissoes.perfilEntregador}} disabled {{/if}} type="button"
+                            class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
                             Remover Solicitação
                         </button>
                     </span>
-                   
+
 
                 </div>
             </div>
@@ -160,6 +166,7 @@
                     <span><strong>Data necessidade:</strong> {{this.data_necessidade}}</span>
                     <span><strong>Data de entrega: </strong>{{this.data_entrega}} </span>
                     <span><strong>Observação de entrega: </strong>{{this.obs_entrega}} </span>
+
                     <span class="m-auto">
                         <a href="/remove/{{this.numero}}/{{this.item}}"
                             class="btn btn-outline-danger btn-sm">Remover</a>
@@ -187,42 +194,45 @@
             <div class="form-group mt-2">
                 <label>Descrição</label>
                 <input class="form-control" type="text" name="descricao" id="descricao" placeholder="Descrição..."
-                    value="" required>
+                    value="" {{#if permissoes.perfilEntregador}} readonly {{/if}} required>
                 <small id="erro-descricao" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Quantidade</label>
                 <input class="form-control" type="text" name="quantidade" id="quantidade" placeholder="Quantidade..."
-                    value="" required>
+                    value="" {{#if permissoes.perfilEntregador}} readonly {{/if}} required>
                 <small id="erro-quantidade" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Observação</label>
                 <input class="form-control" type="text" name="observacao" id="observacao" placeholder="Observação..."
-                    value="" required>
+                    value="" {{#if permissoes.perfilEntregador}} readonly {{/if}} required>
                 <small id="erro-observacao" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Data de Nescessidade</label>
                 <input class="form-control" type="date" name="data_necessidade" id="data_necessidade"
-                    placeholder="Digite a Data..." value="" required>
+                    placeholder="Digite a Data..." value="" {{#if permissoes.perfilEntregador}} readonly {{/if}}
+                    required>
                 <small id="erro-data_necessidade" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Data de entrega</label>
                 <input class="form-control" type="date" name="data_entrega" id="data_entrega"
-                    placeholder="Digite a Data..." value="" required>
+                    placeholder="Digite a Data..." value="" {{#if permissoes.perfilSolicitante}} readonly {{/if}}
+                    required>
                 <small id="erro-data_entrega" class="vermelho"></small>
             </div>
 
             <div class="form-group mt-2">
                 <label>Observação</label>
                 <input class="form-control" type="text" name="obs_entrega" id="obs_entrega"
-                    placeholder="Observação de entrega..." value="" required>
+                    placeholder="Observação de entrega..." value="" {{#if permissoes.perfilSolicitante}} readonly
+                    {{/if}} required>
                 <small id="erro-obs_entrega" class="vermelho"></small>
             </div>
 
@@ -231,23 +241,25 @@
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-         <div class="modal-content">
-           <div class="modal-header">
-             <h4 class="modal-title" id="myModalLabel">Confirme</h4>
-             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-           </div>
-           <div class="modal-body">
-             Deseja mesmo Remover essa Solicitação?
-           </div>
-           <div class="modal-footer">
-             <button type="button" class="btn btn-default" data-bs-dismiss="modal">Fechar</button>
-             <a href="/removes/{{solicitante.numero}}" id="deletar"
-                            class="btn btn-outline-danger btn-sm">Remover Solicitação</a>
-           </div>
-         </div>
-       </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Confirme</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Deseja mesmo Remover essa Solicitação?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Fechar</button>
+                <a href="/removes/{{solicitante.numero}}" id="deletar" class="btn btn-outline-danger btn-sm">Remover
+                    Solicitação</a>
+            </div>
+        </div>
     </div>
+</div>
+
+
 
 
 <script>

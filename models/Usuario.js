@@ -16,10 +16,24 @@ const Usuario = db.define('Usuario', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-    }
+    },
 
+    perfilSolicitante: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+    },
+
+    perfilEntregador: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+    },
+    perfilAdmin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+    }
 })
 
-// User.sync({alter:true})
+// Usuario.sync({alter:true})
+
 
 module.exports = Usuario

@@ -12,7 +12,7 @@ module.exports = class AuthController{
 
       static async loginPost(req, res, next) {
         passport.authenticate("local", {
-          successRedirect: "/pedido/registrar",
+          successRedirect: "solicitacao/lista",
           failureRedirect: "/login",
           failureFlash: true,
         })(req, res, next);
@@ -51,6 +51,7 @@ module.exports = class AuthController{
           name,
           email,
           password: hashedPassword,
+          
         };
   
         try {

@@ -21,9 +21,11 @@ module.exports = class Solicitacoes {
 
         } catch (error) {
             console.log(error)
-        }
 
-        res.render('solicitacao/solicitacao', { solicitante: solicitante, itens: itens })
+        }
+        console.log(res.locals.user.perfilEntregador)
+        var permissoes = {perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador}
+        res.render('solicitacao/solicitacao', { solicitante: solicitante, itens: itens, permissoes: permissoes })
     }
 
     static async solicitacaoPost(req, res) {

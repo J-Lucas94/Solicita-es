@@ -8,7 +8,7 @@ const User = require('../models/Usuario')
 
 module.exports = (passport)=>{
     passport.use(new localStrategy({usernameField: "email",  passwordField: "password"}, (email, password, done)=>{
-        User.findOne({ where: { email: email }}).then((user)=>{
+        User.findOne({raw: true, where: { email: email }}).then((user)=>{
             if(!user){
                 return done(null, false, {message: "Essa conta não exite !"})
             }

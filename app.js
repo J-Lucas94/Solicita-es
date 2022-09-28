@@ -33,10 +33,12 @@ app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg")
     res.locals.error_msg = req.flash("error_msg")
     res.locals.error = req.flash("error")
+// console.log("app.use Usuario: ",req.user)
     res.locals.user = req.user || null
+    res.locals.perfilSolicitante = req.perfilSolicitante || null
     next()
+    
 })
-
 //bodyParser
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));

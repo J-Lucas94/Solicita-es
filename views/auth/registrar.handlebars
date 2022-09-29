@@ -1,22 +1,19 @@
 <div class="m-auto col-8">
-    <div class="list-group-item">
+    <div class="">
         <div class="d-flex">
             <div class="form-group col-6 m-auto">
                 <h2 class="display-5 titulo m-auto">Cadastrar Usuário</h2>
-            </div>
-            <div class="p-2">
-                <a href="/users">
-                </a>
             </div>
         </div>
         {{>_msg}}
         <hr>
         <form>
+            <input type="hidden" id="hiddenId" value="{{usuario.id}}">
             <div class="form-row m-auto">
                 <div class="form-group col-6 m-auto">
                     <label><span class="text-danger">*</span> Nome</label>
                     <input name="name" type="text" class="form-control" id="name" placeholder="Nome completo"
-                        value="{{user.name}}" required>
+                        value="{{usuario.name}}" required>
                 </div>
             </div>
 
@@ -24,7 +21,7 @@
                 <div class="form-group col-6 m-auto">
                     <label><span class="text-danger">*</span> E-mail</label>
                     <input name="email" type="email" class="form-control" id="email" placeholder="E-mail"
-                        value="{{user.email}}" required>
+                        value="{{usuario.email}}" required>
                 </div>
             </div>
 
@@ -32,7 +29,7 @@
                 <div class="form-group col-6 m-auto">
                     <label><span class="text-danger">*</span>Senha</label>
                     <input name="password" type="password" class="form-control" id="password"
-                        placeholder="Senha com minimo 6 caracteres" value="{{user.password}}" required>
+                        placeholder="Senha com minimo 6 caracteres" value="" required>
                 </div>
             </div>
 
@@ -40,7 +37,7 @@
                 <div class="form-group col-6 m-auto">
                     <label><span class="text-danger">*</span>Repetir Senha</label>
                     <input name="confirmpassword" type="password" class="form-control" id="confirmpassword"
-                        placeholder="Digite novamente" value="{{user.confirmpassword}}" required>
+                        placeholder="Digite novamente" value="" required>
                         <button id="form1" type="button" class="btn btn-lg btn-primary btn-block mt-3 m-auto">Cadastrar</button>
                 </div>
             </div>
@@ -58,20 +55,26 @@
             let email = document.querySelector('#email').value
             let password = document.querySelector('#password').value
             let confirmpassword = document.querySelector('#confirmpassword').value
+            let hiddenId = document.querySelector('#hiddenId').value
 
 
 
-            const response = await fetch('/register', {
+            const response = await fetch('/registrar' ,{
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ name, email, password, confirmpassword })
+                body: JSON.stringify({ name, email, password, confirmpassword, hiddenId })
             })
             if (response.status === 200) {
+                return swal("Sucesso !", "Usuário cadastrado com sucesso !", "success");
+            }
+
+            if (response.status === 201) {
                 return swal("Sucesso !", "Usuário atualizado com sucesso !", "success");
             }
+
             if (password !== confirmpassword) {
                 return swal("Error: !", "  As senhas não conferem tenta novamente !", "error");
             }

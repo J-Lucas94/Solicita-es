@@ -1,19 +1,25 @@
-const { where } = require('sequelize')
 const Solicitacao = require('../models/Solicitacoes')
-
+const Usuario = require('../models/Usuario')
 module.exports = class Solicitacoes {
+
+    static home(req, res){
+        var login = {
+            name: res.locals.user.name
+        }
+
+        var permissoes = {
+            perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
+            perfilAdmin: res.locals.user.perfilAdmin
+        }
+        res.render('solicitacao/home', {permissoes:permissoes, login: login})
+        
+    }
+
     static async solicitacao(req, res) {
         try {
 
             if (req.params.numero) {
                 var itens = await Solicitacao.findAll({ raw: true, where: { numero: req.params.numero } })
-
-                // var solicitacao = []
-                // var usuario = itens[0].usuario_solicitante
-                // var numero = itens[0].numero
-                // solicitacao.push(usuario, numero)
-                // var objSOl = {...solicitacao}
-                // console.log(objSOl)
 
                 var solicitante = await Solicitacao.findOne({ raw: true, where: { numero: req.params.numero } })
 
@@ -21,11 +27,12 @@ module.exports = class Solicitacoes {
 
         } catch (error) {
             console.log(error)
-
         }
-        console.log(res.locals.user.perfilEntregador)
-        var permissoes = {perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador}
-        res.render('solicitacao/solicitacao', { solicitante: solicitante, itens: itens, permissoes: permissoes })
+        var permissoes = {
+            perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
+            perfilAdmin: res.locals.user.perfilAdmin
+        }
+        res.render('solicitacao/solicitacao', { solicitante: solicitante, itens: itens, permissoes:permissoes })
     }
 
     static async solicitacaoPost(req, res) {
@@ -62,9 +69,6 @@ module.exports = class Solicitacoes {
                 }
                 res.json({ message: "sucesso", numero: req.body.numero })
             }
-
-
-
         } catch (error) {
             console.log(error)
         }
@@ -72,41 +76,44 @@ module.exports = class Solicitacoes {
 
     static async lista(req, res) {
         try {
-            var solicitacao = await Solicitacao.findAll({ raw: true })
-
+            if (req.query.status == "pendentes") {
+                console.log(req.query.status)
+                var solicitacao = await Solicitacao.findAll({ raw: true, where: { data_entrega: '' } })
+            } else {
+                var solicitacao = await Solicitacao.findAll({ raw: true })
+            }
         } catch (error) {
             console.log(error)
         }
 
-        res.render('solicitacao/lista', { solicitacao: solicitacao })
+        res.render('solicitacao/lista', { solicitacao: solicitacao, status: req.query.status })
     }
-    static async itemGet(req,res){
+    static async itemGet(req, res) {
         try {
-            console.log('numero: ',req.query.numero)
-            console.log('item: ',req.query.item)
-            var item = await Solicitacao.findOne({raw: true,where:{numero:req.query.numero,item:req.query.item}})
+            console.log('numero: ', req.query.numero)
+            console.log('item: ', req.query.item)
+            var item = await Solicitacao.findOne({ raw: true, where: { numero: req.query.numero, item: req.query.item } })
             console.log(item)
             res.json(item)
         } catch (error) {
-            
+
         }
     }
 
-    static async removeItem(req, res){
+    static async removeItem(req, res) {
         var numero = req.params.numero
         var item = req.params.item
-        
-        if(numero && item){
 
-            await Solicitacao.destroy({where: {numero: req.params.numero, item: req.params.item}})
-            res.redirect("/solicitacao")            
+        if (numero && item) {
+            await Solicitacao.destroy({ where: { numero: req.params.numero, item: req.params.item } })
+            res.redirect("/solicitacao/" + req.params.numero)
         }
     }
 
-    static async removeSolicitacao(req, res){
+    static async removeSolicitacao(req, res) {
         try {
-            
-            await Solicitacao.destroy({where: { numero: req.params.numero}})
+
+            await Solicitacao.destroy({ where: { numero: req.params.numero } })
             res.redirect("/lista")
         } catch (error) {
             console.log(error)

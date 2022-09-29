@@ -16,27 +16,60 @@
   <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
   <title>Start</title>
+  
 </head>
 
 <body>
-  {{#if user}}
-  <ul class="nav justify-content-center cabecalho">
-
-    {{!-- {{#if perfil isequal admin}} --}}
-    <li class="nav-item">
-      <a class="nav-link" href="/register">Cadastrar Usuário</a>
-    </li>
-    {{!-- {{/if}} --}}
-    <li class="nav-item">
-      <a class="nav-link" href="/lista">Lista</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link" href="/logout">Sair</a>
-    </li>
-    {{/if}}
-  </ul>
+   {{#if user}}
+  <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-center">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        {{#if permissoes.perfilAdmin}}
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/registrar">Cadastrar Usuário</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listausuarios">Usuários</a>
+        </li>
+        {{/if}}
+        <li class="nav-item">
+          <a class="nav-link" href="/lista">Lista de Solicitações</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Sair</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{{/if}}
+  
   {{{body}}}
+  <footer>{{login.name}}</footer>
+ 
 </body>
+<style>
+  
+
+    footer{
+      background-color: rgb(234, 233, 233);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(0, 0, 0);
+      height: 12vh;
+      bottom: 0;
+      position: absolute;
+      width: 100%;
+    }
+  </style>
 
 </html>

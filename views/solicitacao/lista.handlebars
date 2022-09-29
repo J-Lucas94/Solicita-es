@@ -2,8 +2,16 @@
     <div class="col-12 mt-4" id="header">
         <h1>Lista de solicitações</h1>
         <a class="btn btn-primary" href="/solicitacao">Nova Solicitações</a>
+        <hr>
+        <div class="filtros">
+            <label for="">Filtros Ativos: <strong>{{status}}</strong></label>
+            <br>
+            <button type="button" onclick="javascript:filtrar(event)" data-status="pendentes">Pendentes</button>
+            <button type="button" onclick="javascript:filtrar(event)" data-status="todos">Todos</button>
+
+        </div>
     </div>
-    <button onclick="javascript:atualizar()">refresh</button>
+    
     <div class="col-12 mt-3 " id="header2">
 
         <div class="row">
@@ -43,10 +51,6 @@
                                 <td>{{this.data_necessidade}}</td>
                                 <td>{{this.data_entrega}}</td>
                                 <td>{{this.obs_entrega}}</td>
-
-
-                                
-
                             </tr>
                             {{/each}}
                         </tbody>
@@ -65,7 +69,15 @@
     $(document).ready(function () {
         $('#example').DataTable();
     });
-    function atualizar(){
+    function atualizar() {
         location.reload()
+    }
+    function filtrar(e) {
+        let url = new URL(location.href);
+        url.searchParams.set('status', e.target.getAttribute('data-status'));
+        location.href = url
+        //        console.log(params.get('status'))
+        //        console.log(params.get('status'))
+
     }
 </script>

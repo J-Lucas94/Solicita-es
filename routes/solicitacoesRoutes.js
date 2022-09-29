@@ -3,6 +3,8 @@ const router = express.Router()
 
 const SolicitacoesController = require('../controller/SolicitacoesController')
 const { eAdmin } = require('../helpers/eAdmin')
+
+router.get('/', eAdmin, SolicitacoesController.home)
 router.get('/solicitacao/:numero?',eAdmin, SolicitacoesController.solicitacao)
 router.get('/itemGet/',eAdmin, SolicitacoesController.itemGet)
 router.post('/solicitacao',eAdmin, SolicitacoesController.solicitacaoPost)

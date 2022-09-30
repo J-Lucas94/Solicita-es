@@ -33,12 +33,10 @@ app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg")
     res.locals.error_msg = req.flash("error_msg")
     res.locals.error = req.flash("error")
-// console.log("app.use Usuario: ",req.user)
     res.locals.user = req.user || null
-    res.locals.perfilSolicitante = req.perfilSolicitante || null
     next()
-    
 })
+
 //bodyParser
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));
@@ -110,12 +108,9 @@ app.use(express.static('public'))
 
 //Routes
 
-const authRoutes = require('./routes/authRoutes')
-const solicitacoesRoutes = require('./routes/solicitacoesRoutes')
+// const authRoutes = require('./routes/authRoutes')
+const router = require('./routes/router')
 
-app.use('/', solicitacoesRoutes)
-app.use('/', authRoutes)
-
-//Conection
+app.use('/', router)
 
 app.listen(3000, console.log('Iniciado na porta 3000'))

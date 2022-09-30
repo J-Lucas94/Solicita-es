@@ -1,0 +1,70 @@
+<div class="m-auto col-8">
+    <div class="">
+        <div class="d-flex">
+            <div class="form-group col-6 m-auto">
+                <h2 class="display-6 titulo m-auto">Editar Senha</h2>
+            </div>
+            <div class="p-2">
+            </div>
+        </div>
+        {{>_msg}}
+        <hr>
+        <form>
+            <input type="hidden" id="hiddenId" value="{{usuario.id}}">
+            <div class="form-row">
+                <div class="form-group col-6 m-auto">
+                    <label><span class="text-danger">*</span>Senha</label>
+                    <input name="password" type="password" class="form-control" id="password"
+                        placeholder="Senha com minimo 6 caracteres" value="" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-6 m-auto">
+                    <label><span class="text-danger">*</span>Repetir Senha</label>
+                    <input name="confirmpassword" type="password" class="form-control" id="confirmpassword"
+                        placeholder="Digite novamente" value="" required>
+
+                    <button id="form1" type="button"
+                        class="btn btn-lg btn-warning btn-block mt-3 m-auto">Salvar</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+
+    try {
+        let form1 = document.querySelector('#form1')
+        form1.addEventListener('click', async () => {
+            let password = document.querySelector('#password').value
+            let confirmpassword = document.querySelector('#confirmpassword').value
+            let hiddenId = document.querySelector('#hiddenId').value
+
+            const response = await fetch('/editar/'+hiddenId, {
+                method: 'POST',
+                headers: {
+                "Content-Type": "application/json",
+                'Accept': 'application/json'
+            },
+                body: JSON.stringify({password, confirmpassword, hiddenId })
+            })
+        if (response.status === 200) {
+            return swal("Sucesso !", "Senha atualizada com sucesso !", "success");
+        }
+        if (password !== confirmpassword) {
+            return swal("Error: !", "  As senhas não conferem tenta novamente !", "error");
+        }
+
+        if (response.status === 411) {
+            return swal("Error: !", "  Senha muito fraca !", "error");
+        }
+    })
+
+    } catch (err) {
+        console.log(`Erro: ${err}`)
+    }
+
+</script>

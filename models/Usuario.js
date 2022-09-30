@@ -31,9 +31,9 @@ const Usuario = db.define('Usuario', {
         type: DataTypes.BOOLEAN,
         allowNull: true,
     }
+
 })
 
 // Usuario.sync({alter:true})
-
 
 module.exports = Usuario

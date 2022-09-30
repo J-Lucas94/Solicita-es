@@ -1,18 +1,13 @@
 const Solicitacao = require('../models/Solicitacoes')
-const Usuario = require('../models/Usuario')
 module.exports = class Solicitacoes {
 
     static home(req, res){
-        var login = {
-            name: res.locals.user.name
-        }
-
+       
         var permissoes = {
             perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
-            perfilAdmin: res.locals.user.perfilAdmin
+            perfilAdmin: res.locals.user.perfilAdmin, email: res.locals.user.email, name: res.locals.user.name
         }
-        res.render('solicitacao/home', {permissoes:permissoes, login: login})
-        
+        res.render('solicitacao/home', {permissoes:permissoes})
     }
 
     static async solicitacao(req, res) {
@@ -30,7 +25,7 @@ module.exports = class Solicitacoes {
         }
         var permissoes = {
             perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
-            perfilAdmin: res.locals.user.perfilAdmin
+            perfilAdmin: res.locals.user.perfilAdmin, email: res.locals.user.email, name: res.locals.user.name
         }
         res.render('solicitacao/solicitacao', { solicitante: solicitante, itens: itens, permissoes:permissoes })
     }
@@ -75,6 +70,10 @@ module.exports = class Solicitacoes {
     }
 
     static async lista(req, res) {
+        var permissoes = {
+            perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
+            perfilAdmin: res.locals.user.perfilAdmin, email: res.locals.user.email, name: res.locals.user.name
+        }
         try {
             if (req.query.status == "pendentes") {
                 console.log(req.query.status)
@@ -86,7 +85,7 @@ module.exports = class Solicitacoes {
             console.log(error)
         }
 
-        res.render('solicitacao/lista', { solicitacao: solicitacao, status: req.query.status })
+        res.render('solicitacao/lista', { solicitacao: solicitacao, status: req.query.status, permissoes: permissoes })
     }
     static async itemGet(req, res) {
         try {

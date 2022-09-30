@@ -19,23 +19,16 @@ module.exports = class AuthController {
     })(req, res, next);
   }
 
-  static async registrar(req, res) {
+  static  registrar(req, res) {
     var permissoes = {
       perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
-      perfilAdmin: res.locals.user.perfilAdmin
+      perfilAdmin: res.locals.user.perfilAdmin, email: res.locals.user.email, name: res.locals.user.name
   }
-    if(req.params.id){
-    var usuario = await Usuario.findOne({
-      where: { id: req.params.id },
-      raw: true
-    })
-  }
-  return res.render("auth/registrar", {usuario:usuario, permissoes: permissoes})
-    
+    return res.render("auth/registrar", {permissoes:permissoes})
   }
 
   static async registrarPost(req, res) {
-    const { name, email, password, confirmpassword } = req.body;
+    var { name, email, password, confirmpassword, perfilSolicitante, perfilEntregador, perfilAdmin } = req.body;
 
     if (password != confirmpassword) {
       res
@@ -49,40 +42,123 @@ module.exports = class AuthController {
       return;
     }
 
-    
+    var checkUser = await Usuario.findOne({ where: { email: email } });
 
-    const salt = bcryptjs.genSaltSync(10);
-    const hashedPassword = bcryptjs.hashSync(password, salt);
+    if (checkUser) {
+      res.status(400).json({ message: "O E-mail já está em uso !" });
+      return;
+    }
 
-    const user = {
+    var salt = bcryptjs.genSaltSync(10);
+    var hashedPassword = bcryptjs.hashSync(password, salt);
+
+    var usuario = {
       name,
       email,
       password: hashedPassword,
+      perfilSolicitante,
+      perfilEntregador,
+      perfilAdmin
     };
+    console.log("PERFIL ENTREGADOR",perfilEntregador)
+    console.log("PERFIL SOLICITANTE",perfilSolicitante)
+    console.log("PERFIL ADMIN",perfilAdmin)
 
     try {
-        if(req.body.hiddenId == ""){
-          const createUser = await Usuario.create(user);
+          await Usuario.create(usuario);
           res.status(200).json({ message: "Cadastro realizado com sucesso !" });
-          return;
-        }else{
-         
-       await Usuario.update(user, {where: {id: req.body.hiddenId}});
-
-      res.status(201).json({ message: "Atualização realizada com sucesso !" });
-      return;
-        }
-
+          return; 
     } catch (error) {
       console.log(error);
     }
   }
 
   static async listaUsuario(req, res) {
-    var usuarios = await Usuario.findAll({ raw: true })
-    res.render('auth/listaUsuarios', { usuarios: usuarios })
+
+    var permissoes = {
+      perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
+      perfilAdmin: res.locals.user.perfilAdmin, email: res.locals.user.email, name: res.locals.user.name
+  }
+   
+    var usuarios = await Usuario.findAll({ raw: true });
+
+    res.render("auth/listaUsuarios", { usuarios: usuarios, permissoes: permissoes })
   }
 
+  static async editarUsuario(req, res) {
+    var permissoes = {
+      perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
+      perfilAdmin: res.locals.user.perfilAdmin, email: res.locals.user.email, name: res.locals.user.name
+  }
+  var usuario = await Usuario.findOne({
+      where: { id: req.params.id },
+      raw: true,  
+    });
+    res.render("auth/editarUsuario", { usuario: usuario, permissoes:permissoes })
+} 
+
+  static async editarUsuarioPost(req, res) {
+    var { name, email, perfilSolicitante,
+      perfilEntregador,
+      perfilAdmin } = req.body;
+
+      var usuario = { name,
+       email,
+       perfilSolicitante,
+      perfilEntregador,
+      perfilAdmin
+      };
+
+    try {
+        await Usuario.update(usuario, {where: {id: req.params.id}});
+          res.status(200).json({ message: "Usuario atualizado com sucesso !" });
+          return; 
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async editarSenha(req, res) {
+    var permissoes = {
+      perfilSolicitante: res.locals.user.perfilSolicitante, perfilEntregador: res.locals.user.perfilEntregador,
+      perfilAdmin: res.locals.user.perfilAdmin, email: res.locals.user.email, name: res.locals.user.name
+  }
+  var usuario = await Usuario.findOne({
+      where: { id: req.params.id },
+      raw: true,
+    });
+    res.render("auth/editarSenha", { usuario: usuario, permissoes: permissoes })
+  } 
+
+  static async editarSenhaPost(req, res) {
+
+    var {password, confirmpassword } = req.body;
+
+    if (password != confirmpassword) {
+      res.status(400).json({ message: "As senhas não conferem, tente novamente !" });
+      return;
+    }
+
+    if (password.length < 6) {
+      res.status(411).json({ message: "Senha muito fraca !" });
+      return;
+    }
+
+    var salt = bcryptjs.genSaltSync(10);
+    var hashedPassword = bcryptjs.hashSync(password, salt);
+
+    var usuario = {
+      password: hashedPassword,
+    };
+
+    try {
+      await Usuario.update(usuario, {where: {id: req.params.id}});
+
+      res.status(200).json({ message: "Atualização realizada com sucesso !" });
+      return;
+    } catch (error) {
+      console.log(error);
+    }}
 
   static async deletarUsuario(req, res) {
     try {

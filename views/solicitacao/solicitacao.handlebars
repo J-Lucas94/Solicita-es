@@ -14,9 +14,9 @@
             display: grid;
         }
 
-        .cabecalho {
+        /*.cabecalho {
             display: none;
-        }
+        }*/
 
     }
 
@@ -44,12 +44,6 @@
         text-decoration: none;
     }
 
-    .cabecalho{
-        list-style-type: none;
-        
-    }
-    
-
     .item {
         display: grid;
         grid-template-rows: auto;
@@ -64,15 +58,12 @@
         border-bottom: 1px solid #CCC;
     }
 </style>
-<div class="col-8 m-auto">
+<div class="col-10 m-auto">
     <div class="col-12 mt-4" id="header">
         <h1>Solicitação</h1>
     </div>
-
     <div class="col-12 mt-3 " id="header2">
-
         <div class="form-group">
-
             <label>Número</label>
             <input class="form-control" type="text" name="numero" id="numero" placeholder="Número..."
                 value="{{solicitante.numero}}" readonly>
@@ -92,7 +83,8 @@
         </div>
 
         <div class="row">
-            <button class="btn btn-primary" onclick="javascript:newItem()">Novo Item</button>
+            <button class="btn btn-primary" onclick="javascript:newItem()" {{#if permissoes.perfilEntregador}} disabled
+                {{/if}}>Novo Item</button>
 
             <div class="table1 col-12 mt-4">
                 <div class="table-responsive">
@@ -106,9 +98,7 @@
                                 <th>Data de Nescessidade</th>
                                 <th>Data de entrega</th>
                                 <th>Observação de entrega</th>
-                                
                                 <th>Ações</th>
-                                
                             </tr>
                         </thead>
 
@@ -117,26 +107,26 @@
                             {{#each itens}}
                             <tr>
                                 <td><a class="btn btn-primary" href="#" onclick="javascript:editItem(event)"
-                                        data-id_item="{{this.item}}">{{this.item}}</a></td>                                        
-                                <td>{{this.descricao}}</td>                                
+                                        data-id_item="{{this.item}}">{{this.item}}</a></td>
+                                <td>{{this.descricao}}</td>
                                 <td>{{this.quantidade}}</td>
                                 <td>{{this.observacao}}</td>
                                 <td>{{formatDate2 this.data_necessidade}}</td>
-                                <td>{{this.data_entrega}}</td>                                
-                                <td>{{this.obs_entrega}}</td>                            
-                                <td class="text-center">
-                                    <span class="d-none d-md-block">
+                                <td>{{this.data_entrega}}</td>
+                                <td>{{this.obs_entrega}}</td>
+                                
+                                <td class="text-center">                        
+                                  <span class="d-none d-md-block">
                                         <a href="/remove/{{this.numero}}/{{this.item}}"
-                                            class="btn btn-outline-danger btn-sm">Remover</a>
+                                            class="btn btn-outline-danger btn-sm">Remover</a>  
                                     </span>
                                     <div class="dropdown d-block d-md-none">
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">                         
                                             <a class="dropdown-item"
                                                 href="/remove/{{this.numero}}/{{this.item}}">Remover</a>
                                         </div>
                                     </div>
                                 </td>
-                                
                             </tr>
 
                             {{/each}}
@@ -144,7 +134,6 @@
                         </tbody>
 
                     </table>
-
                     <span class="d-none d-md-block">
 
                         <button {{#if permissoes.perfilEntregador}} disabled {{/if}} type="button"
@@ -152,24 +141,21 @@
                             Remover Solicitação
                         </button>
                     </span>
-
-
                 </div>
             </div>
             <ul class="itens">
                 {{#each itens}}
                 <li class="item">
-                    <span><strong>Número: </strong> {{this.numero}}</span>
-                    <span><strong>Usuário: </strong> {{this.usuario_solicitante}} </span>
-                    <span><strong>item: </strong> {{this.item}} </span>
+                    <span><strong>item: </strong> <a class="btn btn-primary" href="#"
+                            onclick="javascript:editItem(event)" data-id_item="{{this.item}}">{{this.item}}</a> </span>
                     <span><strong>Descricao: </strong> {{this.descricao}} </span>
                     <span><strong>Quantidade:</strong> {{this.quantidade}}</span>
                     <span><strong>Observacao: </strong>{{this.observacao}}</span>
                     <span><strong>Data necessidade:</strong> {{this.data_necessidade}}</span>
                     <span><strong>Data de entrega: </strong>{{this.data_entrega}} </span>
                     <span><strong>Observação de entrega: </strong>{{this.obs_entrega}} </span>
-
                     <span class="m-auto">
+
                         <a href="/remove/{{this.numero}}/{{this.item}}"
                             class="btn btn-outline-danger btn-sm">Remover</a>
                     </span>
@@ -261,10 +247,8 @@
     </div>
 </div>
 
-
-
-
 <script>
+
 
     //Fetch Pedido
     try {
@@ -292,14 +276,15 @@
             if (usuario_solicitante == "") {
                 document.getElementById('erro-usuario_solicitante').innerHTML = "Preencha o campo Usuário !";
                 document.getElementById('usuario_solicitante').focus();
-                //return false;
+                swal("Preencha do usuario")
+                return false;
             } else {
                 document.getElementById('erro-usuario_solicitante').innerHTML = "";
             }
 
             if (item == "") {
-                document.getElementById('erro-item').innerHTML = "Preencha o campo Item !";
-                document.getElementById('item').focus();
+                //document.getElementById('erro-item').innerHTML = "Preencha o campo Item !";
+                //document.getElementById('item').focus();
                 //return false;
             } else {
                 document.getElementById('erro-item').innerHTML = "";
@@ -309,7 +294,7 @@
                 document.getElementById('erro-descricao').innerHTML = "Preencha o campo descrição !";
                 document.getElementById('descricao').focus();
 
-                // return false;
+                return false;
             } else {
                 document.getElementById('erro-descricao').innerHTML = "";
             }
@@ -317,7 +302,7 @@
             if (quantidade == "") {
                 document.getElementById('erro-quantidade').innerHTML = "Preencha o campo Quantidade!";
                 document.getElementById('quantidade').focus();
-                //   return false;
+                return false;
             } else {
                 document.getElementById('erro-quantidade').innerHTML = "";
             }
@@ -325,7 +310,7 @@
             if (observacao == "") {
                 document.getElementById('erro-observacao').innerHTML = "Preencha o campo Observação!";
                 document.getElementById('observacao').focus();
-                //     return false;
+                return false;
             } else {
                 document.getElementById('erro-observacao').innerHTML = "";
             }
@@ -370,6 +355,10 @@
     function newItem() {
         document.getElementById('form_edit').style.display = 'block'
         document.getElementById('item').value = ""
+        document.getElementById('descricao').value = ""
+        document.getElementById('quantidade').value = ""
+        document.getElementById('observacao').value = ""
+        document.getElementById('data_necessidade').value = ""
     }
     function closeItem() {
         document.getElementById('form_edit').style.display = 'none'
@@ -384,5 +373,7 @@
         document.getElementById('quantidade').value = response.quantidade
         document.getElementById('observacao').value = response.observacao
         document.getElementById('data_necessidade').value = response.data_necessidade
+        document.getElementById('data_entrega').value = response.data_entrega
+        document.getElementById('obs_entrega').value = response.obs_entrega
     }
 </script>

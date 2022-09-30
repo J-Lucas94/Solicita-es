@@ -1,21 +1,21 @@
 <div class="col-10 m-auto">
     <div class="col-12 mt-4" id="header">
         <h1>Lista de solicitações</h1>
-        <a class="btn btn-primary" href="/solicitacao">Nova Solicitações</a>
+         {{#if permissoes.perfilSolicitante}}
+        <a class="btn btn-primary" href="/solicitacao">Nova Solicitação</a>
+        {{/if}}
         <hr>
         <div class="filtros">
             <label for="">Filtros Ativos: <strong>{{status}}</strong></label>
             <br>
-            <button type="button" onclick="javascript:filtrar(event)" data-status="pendentes">Pendentes</button>
-            <button type="button" onclick="javascript:filtrar(event)" data-status="todos">Todos</button>
+            <button class="btn btn-secondary" type="button" onclick="javascript:filtrar(event)" data-status="pendentes">Pendentes</button>
+            <button class="btn btn-secondary" type="button" onclick="javascript:filtrar(event)" data-status="todos">Todos</button>
 
         </div>
     </div>
-    
-    <div class="col-12 mt-3 " id="header2">
-
+    {{!-- <button onclick="javascript:atualizar()">refresh</button> --}}
+    <div class="col-12 m-auto " id="header2">
         <div class="row">
-
             <div class="table1 col-12 mt-4">
                 <div class="table-responsive">
                     <table id="example" class="display" style="width:100%">
@@ -31,18 +31,13 @@
                                 <th>Data de entrega</th>
                                 <th>Observação de entrega</th>
                                 
-
                             </tr>
                         </thead>
-
-
                         <tbody id="novalinha">
-                            
                             {{#each solicitacao}}
                             <tr>
-
                                 <td><a href="/solicitacao/{{this.numero}}"
-                                            class="btn btn-outline-primary btn-sm">{{this.numero}}</a></td>
+                                        class="btn btn-outline-primary btn-sm">{{this.numero}}</a></td>
                                 <td>{{this.usuario_solicitante}}</td>
                                 <td>{{this.item}}</td>
                                 <td>{{this.descricao}}</td>
@@ -51,20 +46,16 @@
                                 <td>{{this.data_necessidade}}</td>
                                 <td>{{this.data_entrega}}</td>
                                 <td>{{this.obs_entrega}}</td>
+                                
                             </tr>
                             {{/each}}
                         </tbody>
                     </table>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 </div>
-
 <script>
     $(document).ready(function () {
         $('#example').DataTable();

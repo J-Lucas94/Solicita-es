@@ -2,33 +2,32 @@
     <div class="">
         <div class="d-flex">
             <div class="form-group col-6 m-auto">
-                <h2 class="display-5 titulo m-auto">Cadastrar Usuário</h2>
+                <h2 class="display-5 titulo m-auto">Editar Usuário</h2>
             </div>
             <div class="p-2">
-
+                
             </div>
         </div>
         {{>_msg}}
         <hr>
         <form>
-            <input type="hidden" id="hiddenId" value="{{usuario.id}}">
-            
+
             <div class="col-6 m-auto">
-                <input class="form-check-input" type="checkbox" id="perfilSolicitante" name="perfilSolicitante">
+                <input {{#if usuario.perfilSolicitante}} checked {{/if}} class="form-check-input" type="checkbox" id="perfilSolicitante" name="perfilSolicitante">
                 <label for="perfilSolicitante">Solicitante</label>
             </div>
 
             <div class="col-6 m-auto">
-                <input class="form-check-input" type="checkbox" id="perfilEntregador" name="perfilEntregador">
+                <input {{#if usuario.perfilEntregador}} checked {{/if}} class="form-check-input" type="checkbox" id="perfilEntregador" name="perfilEntregador">
                 <label for="perfilEntregador">Entregador</label>
             </div>
 
             <div class="col-6 m-auto">
-                <input class="form-check-input" type="checkbox" id="perfilAdmin" name="perfilAdmin">
+                <input {{#if usuario.perfilAdmin}} checked {{/if}} class="form-check-input" type="checkbox" id="perfilAdmin" name="perfilAdmin">
                 <label for="perfilAdmin">Administrador</label>
             </div>
 
-
+            <input type="hidden" id="hiddenId" value="{{usuario.id}}">
             <div class="form-row m-auto">
                 <div class="form-group col-6 m-auto">
                     <label><span class="text-danger">*</span> Nome</label>
@@ -42,33 +41,12 @@
                     <label><span class="text-danger">*</span> E-mail</label>
                     <input name="email" type="email" class="form-control" id="email" placeholder="E-mail"
                         value="{{usuario.email}}" required>
+                        <button id="form1" type="button"
+                        class="btn btn-lg btn-warning btn-block mt-3 m-auto">Salvar</button>
                 </div>
             </div>
-
-            <div class="form-row">
-                <div class="form-group col-6 m-auto">
-                    <label><span class="text-danger">*</span>Senha</label>
-                    <input name="password" type="password" class="form-control" id="password"
-                        placeholder="Senha com minimo 6 caracteres" value="" required>
-                </div>
-            </div>
-
-
-            <div class="form-row">
-                <div class="form-group col-6 m-auto">
-                    <label><span class="text-danger">*</span>Repetir Senha</label>
-                    <input name="confirmpassword" type="password" class="form-control" id="confirmpassword"
-                        placeholder="Digite novamente" value="" required>
-                    <button id="form1" type="button"
-                        class="btn btn-lg btn-primary btn-block mt-3 m-auto">Cadastrar</button>
-                </div>
-            </div>
-
-
-
+ 
         </form>
-
-        
     </div>
 </div>
 
@@ -79,26 +57,22 @@
         form1.addEventListener('click', async () => {
             let name = document.querySelector('#name').value
             let email = document.querySelector('#email').value
-            let password = document.querySelector('#password').value
-            let confirmpassword = document.querySelector('#confirmpassword').value
             let hiddenId = document.querySelector('#hiddenId').value
             let perfilSolicitante = document.querySelector('#perfilSolicitante').checked
             let perfilEntregador = document.querySelector('#perfilEntregador').checked
             let perfilAdmin = document.querySelector('#perfilAdmin').checked
 
-            const response = await fetch('/registrar', {
+
+
+            const response = await fetch('/editarusuario/'+hiddenId, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ name, email, password, confirmpassword, hiddenId, perfilSolicitante, perfilEntregador, perfilAdmin })
+                body: JSON.stringify({ name, email, hiddenId, perfilEntregador, perfilSolicitante, perfilAdmin })
             })
             if (response.status === 200) {
-                return swal("Sucesso !", "Usuário cadastrado com sucesso !", "success");
-            }
-
-            if (response.status === 201) {
                 return swal("Sucesso !", "Usuário atualizado com sucesso !", "success");
             }
 
